@@ -1,0 +1,333 @@
+Solving an SDG Problem with Data: Climate Action (SDG 13)
+
+Overview
+
+ will address climate action (SDG 13) by developing a data-driven solution to improve agricultural practices, reduce greenhouse gas emissions, and enhance crop yields in Rwanda. The focus will be on implementing and analyzing new planting methods and land management practices.
+
+Objectives
+Choose an SDG and Identify a Specific Problem:
+
+SDG Selected: Climate Action (SDG 13)
+Problem Definition: In Rwanda, agriculture is a major contributor to greenhouse gas emissions, and crop yields are insufficient to meet food demands. The problem is exacerbated by traditional farming practices that do not account for climate change impacts. Your goal is to use data to explore new planting techniques and land management practices to enhance crop yields and reduce GHG emissions.
+Design and Implement a Relational Database:
+
+Design a database to store and manage data related to crop yields, GHG emissions, and land management practices.
+Write SQL Queries to Retrieve and Analyze Data:
+
+Develop SQL queries to extract and analyze data to derive actionable insights.
+Use Microsoft Excel for Data Visualization and Analysis:
+
+Create visualizations and interactive dashboards in Excel to present your findings.
+Requirements
+
+Part 1: SDG Selection and Problem Definition
+
+SDG Selection: Climate Action (SDG 13)
+Problem Definition: Addressing the impact of agriculture on greenhouse gas emissions and improving crop yields. Specifically, the project will focus on evaluating and promoting new planting methods and soil management practices to increase yields and reduce emissions per hectare.
+Part 2: Database Design
+
+ERD (Entity-Relationship Diagram):
+
+Entities:
+
+Farmers (farmer_id, name, location)
+Crops (crop_id, crop_name, crop_type)
+Planting_Methods (method_id, method_name, description)
+Soil_Management (management_id, technique_name, description)
+Crop_Yields (yield_id, farmer_id, crop_id, method_id, management_id, yield_amount, date, emissions)
+Relationships:
+A Farmer can use multiple Planting_Methods and Soil_Management techniques.
+A Crop can be grown using different Planting_Methods and Soil_Management techniques.
+Each Crop_Yield record links a Farmer, Crop, Planting_Method, and Soil_Management with yield data and associated GHG emissions.
+Schema:
+
+
+CREATE TABLE Farmers (
+  farmer_id INT PRIMARY KEY,
+  name VARCHAR(100),
+  location VARCHAR(100)
+);
+
+CREATE TABLE Crops (
+  crop_id INT PRIMARY KEY,
+  crop_name VARCHAR(100),
+  crop_type VARCHAR(50)
+);
+
+CREATE TABLE Planting_Methods (
+  method_id INT PRIMARY KEY,
+  method_name VARCHAR(100),
+  description TEXT
+);
+
+CREATE TABLE Soil_Management (
+  management_id INT PRIMARY KEY,
+  technique_name VARCHAR(100),
+  description TEXT
+);
+
+CREATE TABLE Crop_Yields (
+  yield_id INT PRIMARY KEY,
+  farmer_id INT,
+  crop_id INT,
+  method_id INT,
+  management_id INT,
+  yield_amount DECIMAL(10, 2),
+  date DATE,
+  emissions DECIMAL(10, 2),
+  FOREIGN KEY (farmer_id) REFERENCES Farmers(farmer_id),
+  FOREIGN KEY (crop_id) REFERENCES Crops(crop_id),
+  FOREIGN KEY (method_id) REFERENCES Planting_Methods(method_id),
+  FOREIGN KEY (management_id) REFERENCES Soil_Management(management_id)
+);
+Sample Data:
+
+
+INSERT INTO Farmers (farmer_id, name, location) VALUES
+(1, 'John Doe', 'Kigali'),
+(2, 'Jane Smith', 'Musanze');
+
+INSERT INTO Crops (crop_id, crop_name, crop_type) VALUES
+(1, 'Maize', 'Cereal'),
+(2, 'Beans', 'Legume');
+
+INSERT INTO Planting_Methods (method_id, method_name, description) VALUES
+(1, 'No-Till Farming', 'Minimal soil disturbance'),
+(2, 'Cover Cropping', 'Planting cover crops to improve soil health');
+
+INSERT INTO Soil_Management (management_id, technique_name, description) VALUES
+(1, 'Organic Fertilization', 'Using organic materials to enrich soil'),
+(2, 'Crop Rotation', 'Rotating different crops to maintain soil fertility');
+
+INSERT INTO Crop_Yields (yield_id, farmer_id, crop_id, method_id, management_id, yield_amount, date, emissions) VALUES
+(1, 1, 1, 1, 1, 1500.00, '2024-08-01', 100.00),
+(2, 2, 2, 2, 2, 800.00, '2024-08-01', 50.00);
+Part 3: SQL Programming
+Data Retrieval Queries:
+
+
+-- Retrieve crop yields and emissions
+SELECT * FROM Crop_Yields WHERE date = '2024-08-01';
+Data Analysis Queries:
+
+
+-- Average yield and emissions per hectare by planting method
+SELECT Planting_Methods.method_name, AVG(Crop_Yields.yield_amount) AS avg_yield, AVG(Crop_Yields.emissions) AS avg_emissions
+FROM Crop_Yields
+JOIN Planting_Methods ON Crop_Yields.method_id = Planting_Methods.method_id
+GROUP BY Planting_Methods.method_name;
+
+-- Yield and emissions by soil management technique
+SELECT Soil_Management.technique_name, AVG(Crop_Yields.yield_amount) AS avg_yield, AVG(Crop_Yields.emissions) AS avg_emissions
+FROM Crop_Yields
+JOIN Soil_Management ON Crop_Yields.management_id = Soil_Management.management_id
+GROUP BY Soil_Management.technique_name;
+
+
+Part 2: Database Design
+1. Define Entities and Relationships
+Based on the problem definition, the key entities for your database are:
+
+Farmers: Information about the farmers.
+Crops: Details about different crops being grown.
+Planting_Methods: Various planting techniques.
+Soil_Management: Different soil management practices.
+Crop_Yields: Records of crop yields and associated GHG emissions.
+Relationships:
+
+A Farmer can use multiple Planting_Methods and Soil_Management techniques.
+A Crop can be grown using different Planting_Methods and Soil_Management techniques.
+Each Crop_Yield record links a Farmer, Crop, Planting_Method, and Soil_Management with yield data and associated GHG emissions.
+2. Design the Entity-Relationship Diagram (ERD)
+ERD Outline:
+
+Farmers
+
+farmer_id (PK)
+name
+location
+Crops
+
+crop_id (PK)
+crop_name
+crop_type
+Planting_Methods
+
+method_id (PK)
+method_name
+description
+Soil_Management
+
+management_id (PK)
+technique_name
+description
+Crop_Yields
+
+yield_id (PK)
+farmer_id (FK)
+crop_id (FK)
+method_id (FK)
+management_id (FK)
+yield_amount
+date
+emissions
+ERD Example:
+
+
+[Farmers] 1----* [Crop_Yields] *----1 [Crops]
+   |                          |                |
+   |                          |                |
+   *----1 [Planting_Methods]  *                *
+   |                                         |
+   *----1 [Soil_Management]                 *
+3. Write SQL Statements to Create the Database Schema
+Create the database schema using SQL statements based on the ERD:
+
+
+
+-- Create Farmers table
+CREATE TABLE Farmers (
+    farmer_id INT PRIMARY KEY,
+    name VARCHAR(100),
+    location VARCHAR(100)
+);
+
+-- Create Crops table
+CREATE TABLE Crops (
+    crop_id INT PRIMARY KEY,
+    crop_name VARCHAR(100),
+    crop_type VARCHAR(50)
+);
+
+-- Create Planting_Methods table
+CREATE TABLE Planting_Methods (
+    method_id INT PRIMARY KEY,
+    method_name VARCHAR(100),
+    description TEXT
+);
+
+-- Create Soil_Management table
+CREATE TABLE Soil_Management (
+    management_id INT PRIMARY KEY,
+    technique_name VARCHAR(100),
+    description TEXT
+);
+
+-- Create Crop_Yields table
+CREATE TABLE Crop_Yields (
+    yield_id INT PRIMARY KEY,
+    farmer_id INT,
+    crop_id INT,
+    method_id INT,
+    management_id INT,
+    yield_amount DECIMAL(10, 2),
+    date DATE,
+    emissions DECIMAL(10, 2),
+    FOREIGN KEY (farmer_id) REFERENCES Farmers(farmer_id),
+    FOREIGN KEY (crop_id) REFERENCES Crops(crop_id),
+    FOREIGN KEY (method_id) REFERENCES Planting_Methods(method_id),
+    FOREIGN KEY (management_id) REFERENCES Soil_Management(management_id)
+);
+4. Populate the Database with Sample Data
+Insert sample data into your tables to get started:
+
+
+
+-- Insert data into Farmers table
+INSERT INTO Farmers (farmer_id, name, location) VALUES
+(1, 'John Doe', 'Kigali'),
+(2, 'Jane Smith', 'Musanze');
+
+-- Insert data into Crops table
+INSERT INTO Crops (crop_id, crop_name, crop_type) VALUES
+(1, 'Maize', 'Cereal'),
+(2, 'Beans', 'Legume');
+
+-- Insert data into Planting_Methods table
+INSERT INTO Planting_Methods (method_id, method_name, description) VALUES
+(1, 'No-Till Farming', 'Minimal soil disturbance'),
+(2, 'Cover Cropping', 'Planting cover crops to improve soil health');
+
+-- Insert data into Soil_Management table
+INSERT INTO Soil_Management (management_id, technique_name, description) VALUES
+(1, 'Organic Fertilization', 'Using organic materials to enrich soil'),
+(2, 'Crop Rotation', 'Rotating different crops to maintain soil fertility');
+
+-- Insert data into Crop_Yields table
+INSERT INTO Crop_Yields (yield_id, farmer_id, crop_id, method_id, management_id, yield_amount, date, emissions) VALUES
+(1, 1, 1, 1, 1, 1500.00, '2024-08-01', 100.00),
+(2, 2, 2, 2, 2, 800.00, '2024-08-01', 50.00);
+
+
+Part 3: SQL Programming
+1. Data Retrieval
+Now that your database is set up, you'll write SQL queries to retrieve relevant data based on your problem definition.
+
+Example Queries:
+
+a. Retrieve Crop Yields by Farmer:
+
+
+
+SELECT f.name AS Farmer_Name, c.crop_name, cy.yield_amount, cy.date
+FROM Crop_Yields cy
+JOIN Farmers f ON cy.farmer_id = f.farmer_id
+JOIN Crops c ON cy.crop_id = c.crop_id
+ORDER BY f.name, cy.date;
+b. Retrieve GHG Emissions by Crop:
+
+
+
+SELECT c.crop_name, SUM(cy.emissions) AS Total_Emissions
+FROM Crop_Yields cy
+JOIN Crops c ON cy.crop_id = c.crop_id
+GROUP BY c.crop_name;
+c. Retrieve Yields Using Specific Planting Methods:
+
+
+
+SELECT pm.method_name, c.crop_name, SUM(cy.yield_amount) AS Total_Yield
+FROM Crop_Yields cy
+JOIN Planting_Methods pm ON cy.method_id = pm.method_id
+JOIN Crops c ON cy.crop_id = c.crop_id
+GROUP BY pm.method_name, c.crop_name;
+d. Retrieve Soil Management Impact on Crop Yields:
+
+
+
+SELECT sm.technique_name, c.crop_name, AVG(cy.yield_amount) AS Average_Yield
+FROM Crop_Yields cy
+JOIN Soil_Management sm ON cy.management_id = sm.management_id
+JOIN Crops c ON cy.crop_id = c.crop_id
+GROUP BY sm.technique_name, c.crop_name;
+2. Data Analysis
+Write SQL queries that help in analyzing the data to generate insights:
+
+Example Analysis Queries:
+
+a. Calculate Average Yield Per Hectare:
+
+
+
+SELECT c.crop_name, AVG(cy.yield_amount) AS Avg_Yield_Per_Hectare
+FROM Crop_Yields cy
+JOIN Crops c ON cy.crop_id = c.crop_id
+GROUP BY c.crop_name;
+b. Identify the Most Efficient Planting Method:
+
+
+
+SELECT pm.method_name, AVG(cy.yield_amount) AS Avg_Yield
+FROM Crop_Yields cy
+JOIN Planting_Methods pm ON cy.method_id = pm.method_id
+GROUP BY pm.method_name
+ORDER BY Avg_Yield DESC
+LIMIT 1;
+c. Compare Emissions Across Different Soil Management Techniques:
+
+
+
+SELECT sm.technique_name, SUM(cy.emissions) AS Total_Emissions
+FROM Crop_Yields cy
+JOIN Soil_Management sm ON cy.management_id = sm.management_id
+GROUP BY sm.technique_name;
